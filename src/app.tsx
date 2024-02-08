@@ -1,16 +1,29 @@
 import { useState } from 'react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { loadProject } from './sdk';
+
+const project = await loadProject()
 
 function App() {
-  const [count, setCount] = useState(0);
 
   return (
     <>
-      <h1>Vite + React</h1>
-      <button onClick={() => setCount((count) => count + 1)}>
-        count is {count}
+      <hr></hr>
+      <h3>Settings</h3>
+      <h4>modules</h4>
+      {project.settings.modules.map((value) => <p>{value}</p>)}
+      <hr></hr>
+      <h3>actions</h3>
+      
+      <button onClick={() => {
+        const settings = project.settings
+        settings.modules.push("module-c@0.6.3")
+        project.setSettings(settings)
+      }}>
+        add module-c
       </button>
+      
     </>
   );
 }

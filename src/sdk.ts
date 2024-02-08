@@ -2,11 +2,27 @@
  * Entrypoint to the state.
  */
 export const loadProject = async () => {
-  return {};
+  let settings = await loadSettingsFile()
+
+  return {
+    settings,
+    setSettings: async (newSettings: any) => {
+      settings = newSettings
+    }
+  };
 };
 
 
-const loadSettingsFile = async () => {}
+const loadSettingsFile = async () => {
+  return {
+    modules: [
+      "module-a@1.0.0",
+      "module-b@2.32.1"
+    ]
+  }
+}
+
+const saveSettingsFile = async () => {}
 
 const resolveModules = async (args: { settings: any }) => {
   const modules = []

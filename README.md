@@ -26,3 +26,10 @@ async function loadProject() {
 The team faced multiple challenges with signals which led to https://github.com/opral/monorepo/issues/1772. During those discussions, the remark that reactive programming within the SDK might not be required came up.
 
 ## Findings
+
+### 1. Expressing the simplest form of state already requires reactivity
+
+```ts
+
+
+```
