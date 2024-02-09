@@ -4,18 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite"
-  },
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "test": "vitest run"
   },
   "devDependencies": {
-    "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.19",
-    "@vitejs/plugin-react": "^4.2.1",
-    "tsx": "^4.7.0",
     "typescript": "^5.2.2",
-    "vite": "^5.1.0"
+    "vite": "^5.1.0",
+    "vitest": "^1.2.2"
+  },
+  "dependencies": {
+    "@reatom/async": "^3.13.4",
+    "@reatom/core": "^3.6.6",
+    "@reatom/testing": "^3.4.4"
   }
 }
