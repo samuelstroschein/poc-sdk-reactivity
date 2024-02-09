@@ -1,5 +1,7 @@
 # POC reactive state requirements of the SDK
 
+https://www.loom.com/share/02ed80cbff644b47b454c14c7ec51587?sid=af0d7678-68df-407d-81a0-79740bb9e807
+
 ## Objectives
 
 1. Model async derived computations that resemble the inlang SDK to retrieve requirements.
@@ -42,7 +44,7 @@ async function A() {
 }
 
 async function B() {
-  return await project.settings.sourceLanguageTag()
+  return await project.settings.sourceLanguageTag();
 }
 
 // executing both in parallel
