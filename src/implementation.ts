@@ -1,59 +1,60 @@
-import { reatomResource } from "@reatom/async"
+import { reatomResource } from "@reatom/async";
+import { Ctx, atom } from "@reatom/core";
 
-export const loadProject = async () => {
-	const settings = reatomResource(async (ctx) => {
-		// TODO: load settings file needs to re-trigger once the settings file changes
-		return await ctx.schedule(() => loadSettingsFile())
-	})
+/**
+ * Emulates a settings file on disk
+ * with an atom to watch for changes
+ */
+const mockSettingsFile = atom(
+  {
+    sourceLanguageTag: "en",
+    languageTags: ["en", "de"],
+    modules: [],
+  },
+  "mockSettingsFile"
+);
 
-	const modules = reatomResource(async (ctx) => {
-		const modules = (await ctx.spy(settings.promiseAtom)).modules 
-		return await resolveModules({ modules })
-	})
+export const loadProject = async (ctx: Ctx) => {
+  const settings = atom(await loadSettingsFile(ctx), "settings");
 
-	return {
-		name: async () => "test-project",
-		settings: async () => settings,
-		installedModules: async () => modules,
-		setSettings: async (newSettings) => {
-			await saveSettingsFile()
-		},
-	}
-}
+  // simulating fs.watch API
+  mockSettingsFile.onChange((ctx, newSettings) => {
+    settings(ctx, newSettings);
+  });
 
-const simulateIO = async () => new Promise((resolve) => setTimeout(resolve, Math.random() * 100))
+  const modules = reatomResource(async (ctx) => {
+    const modules = ctx.get(settings).modules;
+    return await resolveModules({ modules });
+  }, "modules");
 
-const loadSettingsFile = async () => {
-	return {
-		sourceLanguageTag: "en",
-		languageTags: ["en", "de"],
-		modules: [],
-	}
-}
+  return {
+    settings: async () => ctx.get(settings),
+    installedModules: async () => modules,
+    setSettings: async (newSettings: any) => {
+      await saveSettingsFileToDisk(ctx, newSettings);
+    },
+  };
+};
 
-const setSettings = async () => {
-	await saveSettingsFile()
-}
+const simulateIO = async () =>
+  new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
 
-const saveSettingsFile = async () => {
-	await simulateIO()
-}
+const loadSettingsFile = async (ctx: Ctx) => {
+  await simulateIO();
+  return ctx.get(mockSettingsFile);
+};
+
+const saveSettingsFileToDisk = async (ctx: any, newSettings: any) => {
+  // saving settings to disk...
+  mockSettingsFile(ctx, newSettings);
+  await simulateIO();
+};
 
 const resolveModules = async (args: { modules: string[] }) => {
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	for (const _ in args.modules) {
-		// emulate fetching modules
-		await simulateIO()
-	}
-	return args.modules
-}
-
-const loadMessages = async () => {}
-
-const saveMessages = async () => {}
-
-const lintMessages = async () => {}
-
-const getMessage = async () => {}
-
-const updateMessage = async () => {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  for (const _ in args.modules) {
+    // emulate fetching modules
+    await simulateIO();
+  }
+  return args.modules;
+};
