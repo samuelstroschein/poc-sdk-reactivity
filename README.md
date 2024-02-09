@@ -2,11 +2,6 @@
 
 https://www.loom.com/share/02ed80cbff644b47b454c14c7ec51587?sid=af0d7678-68df-407d-81a0-79740bb9e807
 
-## Objectives
-
-1. Model async derived computations that resemble the inlang SDK to retrieve requirements.
-2. Explore whether reactive programming within the SDK is of substantial benefit to justify its adoption.
-
 ## Background
 
 The inlang SDK uses signals, a reactive programming pattern, to describe dependencies between state.
@@ -27,9 +22,7 @@ async function loadProject() {
 
 The team faced multiple challenges with signals which led to https://github.com/opral/monorepo/issues/1772. During those discussions, the remark that reactive programming within the SDK might not be required came up.
 
-## Findings
-
-### 1. Every property must be an async function
+## Example case
 
 Even something subtle like `project.sourceLanguageTag` must be an async function https://github.com/opral/monorepo/issues/1680#issuecomment-1935226254.
 
